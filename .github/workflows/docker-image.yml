@@ -39,3 +39,40 @@ jobs:
           push : true
           tags: ${{ env.docker_repo }}:${{ steps.vars.outputs.tag }}
 
+      - uses: actions/checkout@v3
+        name: Checkout private tools
+        with:
+          repository: astin75/git_ops
+          token: ${{ secrets.PERSONAL_ACCESS_TOKENS }} 
+      - run: |
+          cat <<EOF > kustomize_chart/fast-api/overlays/production/kustomization.yaml
+          apiVersion: kustomize.config.k8s.io/v1beta1
+          kind: Kustomization
+          
+          resources:
+          - ../../base
+
+          patches:
+          - path: workflow-patches.yaml
+            target:
+              group: argoproj.io
+              kind: WorkflowTemplate 
+              name: fibonacci-template 
+              version: v1alpha1
+
+
+          images:
+          - name: FASTAPI_IMAGE
+            newName: astin75/fast-api
+            newTag: ${{ steps.vars.outputs.tag }}
+
+          namespace: production
+          nameSuffix: -production
+          EOF
+          git config --global user.email astin75@gmail.com
+          git config --global user.name astin75          
+          git add .
+          git commit -m "generated"
+          git push          
+        
+
