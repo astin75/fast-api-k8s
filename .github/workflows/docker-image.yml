@@ -45,7 +45,7 @@ jobs:
           repository: astin75/git_ops
           token: ${{ secrets.PERSONAL_ACCESS_TOKENS }} 
       - run: |
-          cat <<EOF > kustomize_chart/fast-api/overlays/production/workflow-patches.yaml
+          cat <<EOF > kustomize_chart/fast-api/overlays/production/kustomization.yaml
           apiVersion: kustomize.config.k8s.io/v1beta1
           kind: Kustomization
           
