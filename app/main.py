@@ -20,18 +20,18 @@ def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
 
 @app.get("/argo/submit")
-def submit_workflow():
+def submit_workflow(namespace: str="production", template_name: str="fibonacci-template-production"):
     config = argo_workflows.Configuration(host = "https://localhost:2746")
     config.verify_ssl = False
 
     client = argo_workflows.ApiClient(config)
     service = workflow_service_api.WorkflowServiceApi(api_client=client)
     template_service = workflow_template_service_api.WorkflowTemplateServiceApi(api_client=client)
-    workflow_yaml= template_service.get_workflow_template(namespace="production", name='fibonacci-template-production')
+    workflow_yaml= template_service.get_workflow_template(namespace=namespace, name=template_name)
 
     submit_result = service.submit_workflow(namespace="production",
                                 body=IoArgoprojWorkflowV1alpha1WorkflowSubmitRequest(resource_kind="WorkflowTemplate",
-                                                                                    resource_name="fibonacci-template-production",
+                                                                                    resource_name=template_name,
                                                                                     _check_type=False),
                                 _check_return_type=False)    
     return {"workflow": submit_result,
