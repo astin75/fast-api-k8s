@@ -19,27 +19,21 @@ def read_root():
 def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
 
-@app.get("/produnction")
-def submit_workflow(namespace: str="production", template_name: str="fibonacci-template-production"):
-    config = argo_workflows.Configuration(host = "https://localhost:2746")
+@app.get("/template")
+def submit_workflow(namespace: str="production"):
+    config = argo_workflows.Configuration(host = "https://argo-server.argo:2746")
     config.verify_ssl = False
 
     client = argo_workflows.ApiClient(config)
-    service = workflow_service_api.WorkflowServiceApi(api_client=client)
     template_service = workflow_template_service_api.WorkflowTemplateServiceApi(api_client=client)
-    workflow_yaml= template_service.get_workflow_template(namespace=namespace, name=template_name)
+    workflow_yaml= template_service.list_workflow_templates(namespace=namespace)
 
-    submit_result = service.submit_workflow(namespace="production",
-                                body=IoArgoprojWorkflowV1alpha1WorkflowSubmitRequest(resource_kind="WorkflowTemplate",
-                                                                                    resource_name=template_name,
-                                                                                    _check_type=False),
-                                _check_return_type=False)    
-    return {"workflow": submit_result,
-            "template": workflow_yaml}  
+                  
+    return {"template": workflow_yaml}  
     
-@app.get("/staging")
-def submit_workflow(namespace: str="staging", template_name: str="fibonacci-template-staging"):
-    config = argo_workflows.Configuration(host = "https://localhost:2746")
+@app.get("/run-workflow")
+def submit_workflow(namespace: str="staging", template_name: str="fibonacci"):
+    config = argo_workflows.Configuration(host = "https://argo-server.argo:2746")
     config.verify_ssl = False
 
     client = argo_workflows.ApiClient(config)
@@ -52,6 +46,5 @@ def submit_workflow(namespace: str="staging", template_name: str="fibonacci-temp
                                                                                     resource_name=template_name,
                                                                                     _check_type=False),
                                 _check_return_type=False)    
-    return {"workflow": submit_result,
-            "template": workflow_yaml}    
+    return {"workflow": submit_result}    
 
