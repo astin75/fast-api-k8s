@@ -45,7 +45,8 @@ jobs:
           repository: astin75/git_ops
           token: ${{ secrets.PERSONAL_ACCESS_TOKENS }} 
       - run: |
-          cat <<EOF > kustomize_chart/fast-api/overlays/production/kustomization.yaml
+          git switch staging    
+          cat <<EOF > kustomize_chart/fast-api/overlays/staging/kustomization.yaml
           apiVersion: kustomize.config.k8s.io/v1beta1
           kind: Kustomization
           
@@ -66,8 +67,8 @@ jobs:
             newName: astin75/fast-api
             newTag: ${{ steps.vars.outputs.tag }}
 
-          namespace: production
-          nameSuffix: -production
+          namespace: staging
+          nameSuffix: -staging
           EOF
           git config --global user.email astin75@gmail.com
           git config --global user.name astin75          
