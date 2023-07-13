@@ -47,7 +47,7 @@ def submit_workflow(namespace: str="staging", template_name: str="fibonacci-temp
     template_service = workflow_template_service_api.WorkflowTemplateServiceApi(api_client=client)
     workflow_yaml= template_service.get_workflow_template(namespace=namespace, name=template_name)
 
-    submit_result = service.submit_workflow(namespace="production",
+    submit_result = service.submit_workflow(namespace="staging",
                                 body=IoArgoprojWorkflowV1alpha1WorkflowSubmitRequest(resource_kind="WorkflowTemplate",
                                                                                     resource_name=template_name,
                                                                                     _check_type=False),
