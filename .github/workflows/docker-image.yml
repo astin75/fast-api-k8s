@@ -73,7 +73,7 @@ jobs:
           git config --global user.email astin75@gmail.com
           git config --global user.name astin75          
           git add .
-          git commit -m "generated"
+          git commit -m "Kustomize overlay"
           git push          
         
 
