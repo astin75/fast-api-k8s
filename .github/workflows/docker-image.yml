@@ -68,7 +68,6 @@ jobs:
             newTag: ${{ steps.vars.outputs.tag }}
 
           namespace: staging
-          nameSuffix: -staging
           EOF
           git config --global user.email astin75@gmail.com
           git config --global user.name astin75          
