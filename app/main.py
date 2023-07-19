@@ -21,7 +21,7 @@ app = FastAPI()
 #     return template_service
 
 async def request():
-    config = argo_workflows.Configuration(host = "https://localhost:2746")
+    config = argo_workflows.Configuration(host = "https://argo-server.argo:2746")
     config.verify_ssl = False
     template_name = 'fibonacci-template'
 
