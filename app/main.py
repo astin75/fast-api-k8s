@@ -23,17 +23,19 @@ app = FastAPI()
 async def request():
     config = argo_workflows.Configuration(host = "https://localhost:2746")
     config.verify_ssl = False
+    template_name = 'fibonacci-template'
 
     client = argo_workflows.ApiClient(config)
     service = workflow_service_api.WorkflowServiceApi(api_client=client)
     template_service = workflow_template_service_api.WorkflowTemplateServiceApi(api_client=client)
-    workflow_yaml= template_service.get_workflow_template(namespace='staging', name='fibonacci')
+    workflow_yaml= template_service.get_workflow_template(namespace='staging', name=template_name)
 
     submit_result = service.submit_workflow(namespace="staging",
                                 body=IoArgoprojWorkflowV1alpha1WorkflowSubmitRequest(resource_kind="WorkflowTemplate",
-                                                                                    resource_name='fibonacci',
+                                                                                    resource_name=template_name,
                                                                                     _check_type=False),
-                                _check_return_type=False)       
+                                _check_return_type=False)  
+    return 1     
 
 async def task():
     async with httpx.AsyncClient() as client:
