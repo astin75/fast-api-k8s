@@ -27,11 +27,11 @@ async def request():
     client = argo_workflows.ApiClient(config)
     service = workflow_service_api.WorkflowServiceApi(api_client=client)
     template_service = workflow_template_service_api.WorkflowTemplateServiceApi(api_client=client)
-    workflow_yaml= template_service.get_workflow_template(namespace=namespace, name=template_name)
+    workflow_yaml= template_service.get_workflow_template(namespace='staging', name='fibonacci')
 
     submit_result = service.submit_workflow(namespace="staging",
                                 body=IoArgoprojWorkflowV1alpha1WorkflowSubmitRequest(resource_kind="WorkflowTemplate",
-                                                                                    resource_name=template_name,
+                                                                                    resource_name='fibonacci',
                                                                                     _check_type=False),
                                 _check_return_type=False)       
 
