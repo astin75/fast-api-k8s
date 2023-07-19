@@ -21,18 +21,18 @@ def read_item(item_id: int, q: Union[str, None] = None):
 
 @app.get("/template")
 def submit_workflow(namespace: str="staging"):
-    try:
-        config = argo_workflows.Configuration(host = "https://argo-server.argo:2746")
-        config.verify_ssl = False
-    except Exception as e:
-        config = e
+    # try:
+    #     config = argo_workflows.Configuration(host = "https://argo-server.argo:2746")
+    #     config.verify_ssl = False
+    # except Exception as e:
+    #     config = e
 
     # client = argo_workflows.ApiClient(config)
     # template_service = workflow_template_service_api.WorkflowTemplateServiceApi(api_client=client)
     # workflow_yaml= template_service.list_workflow_templates(namespace=namespace)
 
                   
-    return {"template": config}  
+    return {"template": 1}  
     
 @app.get("/run-workflow")
 def submit_workflow(namespace: str="staging", template_name: str="fibonacci"):
