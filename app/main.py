@@ -21,8 +21,11 @@ def read_item(item_id: int, q: Union[str, None] = None):
 
 @app.get("/template")
 def submit_workflow(namespace: str="staging"):
-    config = argo_workflows.Configuration(host = "https://argo-server.argo:2746")
-    config.verify_ssl = False
+    try:
+        config = argo_workflows.Configuration(host = "https://argo-server.argo:2746")
+        config.verify_ssl = False
+    except Exception as e:
+        config = e
 
     # client = argo_workflows.ApiClient(config)
     # template_service = workflow_template_service_api.WorkflowTemplateServiceApi(api_client=client)
