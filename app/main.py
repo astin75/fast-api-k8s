@@ -21,7 +21,7 @@ def read_item(item_id: int, q: Union[str, None] = None):
 
 @app.get("/template")
 def submit_workflow(namespace: str="production"):
-    config = argo_workflows.Configuration(host = "https://localhost:2746")
+    config = argo_workflows.Configuration(host = "https://92.168.49.2:30004")
     config.verify_ssl = False
 
     client = argo_workflows.ApiClient(config)
@@ -33,7 +33,7 @@ def submit_workflow(namespace: str="production"):
     
 @app.get("/run-workflow")
 def submit_workflow(namespace: str="staging", template_name: str="fibonacci"):
-    config = argo_workflows.Configuration(host = "https://localhost:2746")
+    config = argo_workflows.Configuration(host = "https://92.168.49.2:30004")
     config.verify_ssl = False
 
     client = argo_workflows.ApiClient(config)
