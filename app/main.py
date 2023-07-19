@@ -1,13 +1,31 @@
 from typing import Union
 from fastapi import FastAPI
+import httpx
+import asyncio
 
 import argo_workflows
 from argo_workflows.api import workflow_service_api, workflow_template_service_api
 from argo_workflows.model.io_argoproj_workflow_v1alpha1_workflow_submit_request import \
     IoArgoprojWorkflowV1alpha1WorkflowSubmitRequest
-
-
 app = FastAPI()
+
+async def request():
+    try:
+        config = argo_workflows.Configuration(host = "https://localhost:2746")
+        config.verify_ssl = False
+    except Exception as e:
+        config = e
+
+    client = argo_workflows.ApiClient(config)
+    template_service = workflow_template_service_api.WorkflowTemplateServiceApi(api_client=client)
+    return template_service
+
+
+async def task():
+    async with httpx.AsyncClient() as client:
+        tasks =  [request() for i in range(1)]
+        result =  await asyncio.gather(*tasks)
+        return result
 
 
 @app.get("/")
@@ -18,21 +36,15 @@ def read_root():
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
+# @app.get("/mse")
+# def submit_workflow2(namespace: str="staging"):
 
 @app.get("/template")
-def submit_workflow(namespace: str="staging"):
-    try:
-        config = argo_workflows.Configuration(host = "https://localhost:2746")
-        config.verify_ssl = False
-    except Exception as e:
-        config = e
-
-    # client = argo_workflows.ApiClient(config)
-    # template_service = workflow_template_service_api.WorkflowTemplateServiceApi(api_client=client)
-    # workflow_yaml= template_service.list_workflow_templates(namespace=namespace)
+async def submit_workflow(namespace: str="staging"): 
+    await task()
 
                   
-    return {"template": config}  
+    return {"template": 1}  
     
 @app.get("/run-workflow")
 def submit_workflow(namespace: str="staging", template_name: str="fibonacci"):
