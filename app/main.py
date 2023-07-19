@@ -20,16 +20,16 @@ def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
 
 @app.get("/template")
-def submit_workflow(namespace: str="production"):
+def submit_workflow(namespace: str="staging"):
     config = argo_workflows.Configuration(host = "https://argo-server.argo:2746")
     config.verify_ssl = False
 
-    client = argo_workflows.ApiClient(config)
-    template_service = workflow_template_service_api.WorkflowTemplateServiceApi(api_client=client)
-    workflow_yaml= template_service.list_workflow_templates(namespace=namespace)
+    # client = argo_workflows.ApiClient(config)
+    # template_service = workflow_template_service_api.WorkflowTemplateServiceApi(api_client=client)
+    # workflow_yaml= template_service.list_workflow_templates(namespace=namespace)
 
                   
-    return {"template": workflow_yaml}  
+    return {"template": config}  
     
 @app.get("/run-workflow")
 def submit_workflow(namespace: str="staging", template_name: str="fibonacci"):
