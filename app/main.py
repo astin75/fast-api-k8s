@@ -48,7 +48,7 @@ async def submit_workflow(namespace: str="staging"):
     
 @app.get("/run-workflow")
 def submit_workflow(namespace: str="staging", template_name: str="fibonacci"):
-    config = argo_workflows.Configuration(host = "https://argo-server.argo:2746")
+    config = argo_workflows.Configuration(host = "https://localhost:2746")
     config.verify_ssl = False
 
     client = argo_workflows.ApiClient(config)
