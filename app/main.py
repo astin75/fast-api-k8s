@@ -36,14 +36,15 @@ async def task():
 def read_root():
     return {"Hello": "World"}
 
+@app.get("/run-workflow")
+async def submit_workflow(namespace: str="staging", template_name: str="fibonacci"):
+    await task()
+ 
+    return {"workflow": 1} 
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
     
-@app.get("/run-workflow")
-async def submit_workflow(namespace: str="staging", template_name: str="fibonacci"):
-    await task()
- 
-    return {"workflow": 1}    
+   
 
